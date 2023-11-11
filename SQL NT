@@ -1,0 +1,261 @@
+SELECT
+	1 AS nmb_1
+	,2 AS nmb_2
+	, 5+5 AS nmb_3;
+	
+	SELECT
+		COUNT(*)  AS cnt_all
+		, COUNT(exp_level)  AS cnt_level
+		, COUNT(DISTINCT exp_level)
+	FROM salaries
+	LIMIT 10;
+	
+	SELECT
+	1 AS nmb_1
+	,2 AS nmb_2
+	, 5+5 AS nmb_3;
+	
+	SELECT
+		AVG(salary_in_usd)  AS salary_avg
+		,MIN(salary_in_usd) AS salary_min
+		,MAX(salary_in_usd) AS salary_max
+	FROM salaries
+	WHERE year = '2023'
+	LIMIT 10;
+	
+	
+	SELECT 
+		year
+		, exp_level
+		, salary_in_usd
+		, salary_in_usd * 38.  AS salary_in_uah
+		-- 'SE' - Senior
+		-- 'MI' - Middle
+		-- Other
+		, CASE
+			WHEN exp_level = 'SE'
+			THEN 'Senior'
+			WHEN exp_level ='MI'
+			THEN 'Middle'
+			ELSE 'Other'  END  AS full_level
+	
+	FROM salaries
+	LIMIT 100;
+	
+	SELECT
+		COUNT(*)  AS cnt_all
+		, COUNT(exp_level)  AS cnt_level
+		, COUNT(DISTINCT exp_level)
+	FROM salaries
+	LIMIT 10;
+	
+-- Вивести кількість унікальних значень для кожної колонки, що містить текстові значення.	
+SELECT 
+	COUNT(DISTINCT year) AS cnt_year
+	, COUNT(DISTINCT exp_level) AS cnt_level
+	, COUNT(DISTINCT emo_type) AS cnt_type
+	, COUNT(DISTINCT job_title) AS cnt_jobtitle
+	, COUNT(DISTINCT emp_location) AS cnt_emplocation
+	, COUNT(DISTINCT company_location) AS cnt_companylocation
+	, COUNT(DISTINCT salary_curr) AS cnt_salarycurr
+	, COUNT(DISTINCT company_size) AS cnt_size
+	
+FROM salaries;
+
+--Вивести унікальні значення для кожної колонки, що містить текстові значення. (SELECT DISTINCT column_name FROM salaries)
+
+
+SELECT DISTINCT year FROM salaries;
+SELECT DISTINCT exp_level FROM salaries;
+SELECT DISTINCT emo_type FROM salaries;
+SELECT DISTINCT job_title FROM salaries;
+SELECT DISTINCT salary FROM salaries;
+SELECT DISTINCT salary_curr FROM salaries;
+SELECT DISTINCT salary_in_usd FROM salaries;
+SELECT DISTINCT emp_location FROM salaries;
+SELECT DISTINCT remote_ratio FROM salaries;
+SELECT DISTINCT company_location FROM salaries;
+SELECT DISTINCT company_size FROM salaries;
+
+
+
+SELECT 
+    (SELECT array_agg(DISTINCT year) FROM salaries) AS unique_years,
+    (SELECT array_agg(DISTINCT exp_level) FROM salaries) AS unique_exp_levels,
+    (SELECT array_agg(DISTINCT emo_type) FROM salaries) AS unique_emo_types,
+    (SELECT array_agg(DISTINCT job_title) FROM salaries) AS unique_job_titles,
+    (SELECT array_agg(DISTINCT salary) FROM salaries) AS unique_salaries,
+    (SELECT array_agg(DISTINCT salary_curr) FROM salaries) AS unique_salary_currs,
+    (SELECT array_agg(DISTINCT salary_in_usd) FROM salaries) AS unique_salary_in_usds,
+    (SELECT array_agg(DISTINCT emp_location) FROM salaries) AS unique_emp_locations,
+    (SELECT array_agg(DISTINCT remote_ratio) FROM salaries) AS unique_remote_ratios,
+    (SELECT array_agg(DISTINCT company_location) FROM salaries) AS unique_company_locations,
+    (SELECT array_agg(DISTINCT company_size) FROM salaries) AS unique_company_sizes;
+
+-- Вивести середню, мінімальну та максимальну з/п (salary_in_usd) для кожного року (окремими запитами, в кожному з яких впроваджено фільтр відповідного року)
+SELECT
+		AVG(salary_in_usd)  AS salary_avg
+		,MIN(salary_in_usd) AS salary_min
+		,MAX(salary_in_usd) AS salary_max
+	FROM salaries
+	WHERE 	
+		year = '2023';
+	
+SELECT
+		AVG(salary_in_usd)  AS salary_avg
+		,MIN(salary_in_usd) AS salary_min
+		,MAX(salary_in_usd) AS salary_max
+	FROM salaries
+	WHERE year = '2022';
+
+SELECT
+		AVG(salary_in_usd)  AS salary_avg
+		,MIN(salary_in_usd) AS salary_min
+		,MAX(salary_in_usd) AS salary_max
+	FROM salaries
+	WHERE year = '2021';
+	
+SELECT
+		AVG(salary_in_usd)  AS salary_avg
+		,MIN(salary_in_usd) AS salary_min
+		,MAX(salary_in_usd) AS salary_max
+	FROM salaries
+	WHERE year = '2020';
+	
+--4. Вивести середню з/п (salary_in_usd) для 2023 року по кожному рівню досвіду працівників (окремими запитами, в кожному з яких впроваджено фільтр року та досвіду).
+	
+SELECT
+	year
+	, exp_level
+	,AVG(salary_in_usd)  AS salary_avg
+	,MIN(salary_in_usd) AS salary_min
+	,MAX(salary_in_usd) AS salary_max
+		
+	FROM salaries
+	WHERE 	
+		year = '2023' AND
+		exp_level = 'EX'
+		GROUP BY year, exp_level;
+		
+SELECT
+	year
+	, exp_level
+	,AVG(salary_in_usd)  AS salary_avg
+	,MIN(salary_in_usd) AS salary_min
+	,MAX(salary_in_usd) AS salary_max
+		
+	FROM salaries
+	WHERE 	
+		year = '2023' AND
+		exp_level = 'MI'
+		GROUP BY year, exp_level;
+		
+SELECT
+	year
+	, exp_level
+	,AVG(salary_in_usd)  AS salary_avg
+	,MIN(salary_in_usd) AS salary_min
+	,MAX(salary_in_usd) AS salary_max
+		
+	FROM salaries
+	WHERE 	
+		year = '2023' AND
+		exp_level = 'EN'
+		GROUP BY year, exp_level;
+		
+		
+SELECT
+	year
+	, exp_level
+	,AVG(salary_in_usd)  AS salary_avg
+	,MIN(salary_in_usd) AS salary_min
+	,MAX(salary_in_usd) AS salary_max
+		
+	FROM salaries
+	WHERE 	
+		year = '2023' AND
+		exp_level = 'SE'
+	GROUP BY year, exp_level;
+
+--Вивести 5 найвищих заробітних плат в 2023 році для представників спеціальності ML Engineer. Заробітні плати перевести в гривні.
+
+SELECT 
+		year
+		, job_title
+		, salary_in_usd * 38.  AS salary_in_uah
+FROM salaries
+WHERE 	
+		year = '2023' AND
+		job_title = 'ML Engineer'
+ORDER BY
+    salary_in_uah DESC
+LIMIT 5;
+
+--6. Вивести Унікальні значення колонки remote_ratio, формат даних має бути дробовим з двома знаками після коми, приклад: значення 50 має відображатись в форматі 0.50
+
+SELECT 
+	DISTINCT remote_ratio * 0.01 AS uniq_remote 
+	
+FROM salaries;	
+
+--7. Вивести дані таблиці, додавши колонку 'exp_level_full' з повною назвою рівнів досвіду працівників відповідно до колонки exp_level. Визначення: Entry-level (EN), Mid-level (MI), Senior-level (SE), Executive-level (EX)
+SELECT *
+	,CASE exp_level
+        WHEN 'EN' THEN 'Entry-level'
+        WHEN 'MI' THEN 'Mid-level'
+        WHEN 'SE' THEN 'Senior-level'
+        WHEN 'EX' THEN 'Executive-level'
+        ELSE 'Other'
+    END AS exp_level_full
+FROM
+    salaries;
+	
+--8.Додатки колонку "salary_category', яка буде відображати різні категорії заробітних плат відповідно до їх значення в колонці 'salary_in_usd'. Визначення: з/п менша за 20 000 - Категорія 1, з/п менша за 50 000 - Категорія 2, з/п менша за 100 000 - Категорія 3, з/п більша за 100 000 - Категорія 4
+
+SELECT *
+	,CASE 
+        WHEN salary_in_usd <= 20000 THEN 'Category 1'
+        WHEN salary_in_usd <= 50000 THEN 'Category 2'
+        WHEN salary_in_usd <= 100000 THEN 'Category 3'
+        ELSE 'Category 4'
+    END AS salary_category
+FROM
+    salaries;	
+	
+--9. Дослідити всі колонки на наявність відсутніх значень, порівнявши кількість рядків таблиці з кількістю значень відповідної колонки
+
+SELECT
+    COUNT(*) 
+	AS total_rows
+	,COUNT(*) - COUNT(year) AS cnt_year
+    ,COUNT(*) - COUNT(exp_level) AS cnt_exp_level
+    ,COUNT(*) - COUNT(emo_type) AS cnt_emo_type
+    ,COUNT(*) - COUNT(job_title) AS cnt_job_title
+    ,COUNT(*) - COUNT(salary) AS cnt_salary
+    ,COUNT(*) - COUNT(salary_curr) AS cnt_salary_curr
+    ,COUNT(*) - COUNT(salary_in_usd) AS cnt_salary_in_usd
+    ,COUNT(*) - COUNT(emp_location) AS cnt_emp_location
+    ,COUNT(*) - COUNT(remote_ratio) AS cnt_remote_ratio
+    ,COUNT(*) - COUNT(company_location) AS cnt_company_location
+    ,COUNT(*) - COUNT(company_size) AS cnt_company_size
+FROM
+    salaries;
+	
+--10. Порахувати кількість працівників в таблиці, які в 2023 році працюють на компанії розміру "М" і отримують з/п вищу за $100 000
+
+SELECT
+	COUNT(salary_in_usd)
+FROM salaries
+WHERE 	
+		year = '2023' AND
+		company_size = 'M' AND
+		salary_in_usd >= 100000;
+		
+		
+SELECT COUNT(salary_in_usd)
+FROM salaries
+WHERE 1=1
+	AND year = '2023'
+	AND company_size = 'M'
+	AND salary_in_usd >= 100000;
+	
